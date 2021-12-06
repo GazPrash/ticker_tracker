@@ -1,8 +1,8 @@
+from __future__ import annotations
 import pandas as pd
 import random as rd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from __future__ import annotations
 
 
 class Plot:
@@ -40,8 +40,16 @@ class Plot:
             self.plt.title(f'{title}-{argument}')
 
         elif kind == 'vio' or kind == 'vios' or kind == 'box' or kind == 'kde':
-            pass    
+            if kind == 'vio' or kind == 'vios':
+                swarm = True if (kind == 'vios') else False
+                return self.violin_plot(df, title, argument, swarm = swarm)
 
+            elif kind == 'box':
+                return self.boxplot()
+
+            elif kind == 'kde':
+                return self.kernal_density_plot()
+            
         elif kind == 'ecdf':
             pass
 
@@ -66,16 +74,30 @@ class Plot:
 
         return ...
 
-    def ecdfplot(self, df: pd.Dataframe, title, argument:str = 'Close'):
+    def ecdf_plot(self, df: pd.Dataframe, title, argument:str = 'Close'):
         clr = self.random_ink()
         self.sns.ecdfplot(x = df['argument'], color = clr, linewidth = '2')
         self.plt.xlabel(title)
         self.plt.title(f"Empirical Cumulative Dist. Function for {title}")
 
+    def violin_plot(self, df: pd.Dataframe, title, argument:str = 'Close', swarm = False):
+        clr = self.random_ink()
+        self.sns.violinplot(x = None, y = argument, data = df, color = clr)
+        if swarm:
+            self.sns.swarmplot(x = None, y = argument, data = df, color = '#000')
+        self.plt.title(f"Violin Dist. for {title}")
 
+    def box_plot(self,  df: pd.Dataframe, title, argument:str = 'Close'):
+        clr = self.random_ink()
+        self.sns.boxplot(x = None, y = argument, data = df, color = clr)
+        self.plt.title(f"Box Dist. for {title}")
 
-    def kernal_density_plots(self, swarm = False):
-        pass
+    def kernal_density_plot(self, df: pd.Dataframe, title, argument:str = 'Close'):
+        clr = self.random_ink()
+        self.sns.kdeplot(x = None, y = argument, data = df, color = clr)
+        self.plt.title(f"Kernal Desnity Est. for {title}")
 
-    def jointplt(self):
-        pass
+    def jointplot(self, df: pd.Dataframe, title, argument1:str = 'Close', argument2:str = 'Open'):
+        clr = self.random_ink()
+        self.sns.jointplot(x = argument1, y = argument2, data = df, color = clr)        
+        self.plt.title(f"Joint Plot comparison for {title} - ({argument1} & {argument2})")
