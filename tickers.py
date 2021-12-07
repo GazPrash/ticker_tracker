@@ -13,7 +13,7 @@ class Ticker:
     def __eq__(self, other):
         return self.df == other.df
 
-    def find_dataframe(self, trange: str, interval: str):
+    def find_dataframe(self, trange: str = "1d", interval: str = "30m"):
         get_ticker = GetStock(self.ticker, trange, interval)
         self.df = get_ticker.locate()
 

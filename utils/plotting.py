@@ -101,3 +101,5 @@ class Plot:
         clr = self.random_ink()
         self.sns.jointplot(x = argument1, y = argument2, data = df, color = clr)        
         self.plt.title(f"Joint Plot comparison for {title} - ({argument1} & {argument2})")
+
+    
