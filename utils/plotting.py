@@ -52,6 +52,9 @@ class Plot:
             
         elif kind == 'ecdf':
             pass
+        
+        elif kind == 'joint':
+            pass
 
 
     def draw_compare(self, df1: pd.DataFrame, df2: pd.DataFrame, title1, title2,  argument:str = 'Close'):

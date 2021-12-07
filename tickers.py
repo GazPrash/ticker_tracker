@@ -33,7 +33,7 @@ class Ticker:
         if self.df is None:
             self.find_dataframe(condnl_args)
         if other_ticker.df is None:
-            other_ticker.find_dataframe(condnl_args)
+            other_ticker.find_dataframe(*condnl_args)
         if (not (self.df).empty) and (not (other_ticker.df).empty):
             if plot_type == "norm-plot":
                 return self.plot.draw_compare(
