@@ -3,6 +3,8 @@ import pandas as pd
 import random as rd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import io
+import base64
 
 
 class Plot:
@@ -23,6 +25,13 @@ class Plot:
 
     def draw(self, df: pd.DataFrame, title: str,  kind:str = 'plot', argument = 'Close'):
         clr = self.random_ink()
+
+        if kind == 'joint':
+            arg1, arg2 = argument.split(' ')
+        else:
+            argument = argument.strip()
+
+        print(f'{kind=}')
 
         if kind == 'plot':
             self.plt.plot(df.index, df[argument], linewidth = '2', marker = 'H', color = clr, label = title)
@@ -51,10 +60,12 @@ class Plot:
                 return self.kernal_density_plot()
             
         elif kind == 'ecdf':
-            pass
+            return self.ecdf_plot(df, title, argument)
         
         elif kind == 'joint':
-            pass
+            self.joint_plot(df, title, argument1= arg1, argument2= arg2)
+
+        self.plt.show()
 
 
     def draw_compare(self, df1: pd.DataFrame, df2: pd.DataFrame, title1, title2,  argument:str = 'Close'):
@@ -100,9 +111,16 @@ class Plot:
         self.sns.kdeplot(x = None, y = argument, data = df, color = clr)
         self.plt.title(f"Kernal Desnity Est. for {title}")
 
-    def jointplot(self, df: pd.Dataframe, title, argument1:str = 'Close', argument2:str = 'Open'):
+    def joint_plot(self, df: pd.Dataframe, title, argument1:str = 'Close', argument2:str = 'Open'):
         clr = self.random_ink()
         self.sns.jointplot(x = argument1, y = argument2, data = df, color = clr)        
         self.plt.title(f"Joint Plot comparison for {title} - ({argument1} & {argument2})")
+
+    def encode_img(self, ):
+        if self.figure:
+            return self.figure
+        else:
+            return None
+
 
     

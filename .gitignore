@@ -1,3 +1,5 @@
 #all test-notebooks
 *.ipynb
 cl_interface.py
+logger_test.py
+__pycache__

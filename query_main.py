@@ -1,10 +1,27 @@
+from __future__ import annotations
 from tickers import Ticker
 
-class Interface:
+
+class TicQuery:
     def __init__(self, tic):
         self.tic = tic
-        self.tic_obj
-        self.mode
+        self.tic_obj = None
+        self.mode = None
+        self.query_type = 'self'
+
+    def __eq__(self, other):
+        return (self.tic == other.tic) & (self.tic_obj == other.tic_obj)
+
+    def verify_conditionals(self, other):
+        return self.mode == other.mode
+
+    def set_qtype(self):
+        perf:str = input('Do You wish to perform a comparison analysis b/w this ticker with another? (Y/n)')
+        if perf.lower() == 'y':
+            self.query_type = 'comparison'
+
+    def get_qtype(self):
+        return self.query_type
 
     def initialize(self):
         self.tic_obj = Ticker(self.tic)
@@ -12,8 +29,6 @@ class Interface:
             raise Exception(
                 "We don not have any information regarding the requested ticker/stock"
             )
-        else:
-            return
 
     def set_mode(self):
         arg: str = input("Would you like to analyze the latest results? (Y/n): ")
@@ -22,7 +37,9 @@ class Interface:
             interval: str = "30m"
 
         else:
-            t_range: str = input("Select & Enter a valid timeframe (1d/5d/1mo/3mo/1y/max)")
+            t_range: str = input(
+                "Select & Enter a valid timeframe (1d/5d/1mo/3mo/1y/max)"
+            )
             interval: str = input(
                 "Select & Enter a valid time interval (5m/15m/30m/90m/1h/1d)"
             )
@@ -34,7 +51,6 @@ class Interface:
             """
             1. Download CSV
             2. Analyze Data
-            3. Compare with...  
         """
         )
 
@@ -48,21 +64,13 @@ class Interface:
             self.save_df()
         elif opt == 2:
             self.plot_normal()
-        elif opt == 3:
-            self.plot_compare()
 
     def save_df(self):
         df = self.tic_obj.find_dataframe(*self.mode)
         df.to_csv(f"Downloads/{self.tic} Stocks/")
 
-    def plot_argument(self, compare:bool = False)-> str:
-        arg_dict = {
-            1: "Close",
-            2: "Open",
-            3: "Max",
-            4: "Adj Close",
-            5: "Volume"
-        }
+    def plot_argument(self, self_compare: bool = False) -> str:
+        arg_dict = {1: "Close", 2: "Open", 3: "Max", 4: "Adj Close", 5: "Volume"}
 
         print(
             """
@@ -82,9 +90,9 @@ class Interface:
                 "Please choose a category from above for analysis (Enter the index number of your choice): "
             )
         )
-        argument1 = arg_dict[task1] 
+        argument1 = arg_dict[task1]
 
-        if compare:
+        if self_compare:
             task2: int = int(
                 input(
                     "Please choose a category from above for analysis, for the 2nd curve in the joint plot (Enter the index number of your choice): "
@@ -93,8 +101,7 @@ class Interface:
 
             argument2 = arg_dict[task2]
 
-
-        return (argument1 + ' ' + argument2)
+        return argument1 + " " + argument2
 
     def plot_normal(self):
         print(
@@ -133,15 +140,59 @@ class Interface:
         elif anls_mode == 8:
             plot_style = "joint"
 
-
-        if anls_mode ==8:
-            main_arg = self.plot_argument(compare= True)
+        if anls_mode == 8:
+            main_arg = self.plot_argument(self_compare=True)
         else:
             main_arg = self.plot_argument()
 
+        plot_fig = self.tic_obj.plot_analysis(kind=plot_style, argument=(main_arg))
+        # plot_img.save(f"Downloads/{self.tic} Analysis")  # ......TODO Yet to define.
 
-        plot_img = self.tic_obj.plot_analysis(kind=plot_style, argument = (main_arg))
-        plot_img.save(f"Downloads/{self.tic} Analysis") #......TODO Yet to define.
 
-    def plot_compare(self):
-        pass
+    def plot_compare(self, other: TicQuery):
+
+        if not self.verify_conditionals(other):
+            #note to self : use logging for the love of god aaaaaaaaaaaaaaaaaaaaaah
+
+            print(
+                """You've opted to analyze two different tickers together with contradicting time 
+                intervals and range. 
+                [Initial Ticker's settings will be applied for this analysis].""",
+            end = '\n\n')
+
+        print(
+            """
+            1. Linear Plot Comparison
+            2. Scatter Plot Comparison w/ Regression        
+        
+        """
+        )
+        ctype: int = int(
+            input("Choose a Comparison Type (Enter the index number of your choice): ")
+        )
+
+        main_arg = self.plot_argument()
+        if ctype == 1:
+            plot_img = self.tic_obj.compare(other.tic_obj, self.set_mode, argument = main_arg)
+            plot_img.save(f"Downloads/{self.tic} Analysis")  # ......TODO Yet to define.
+
+
+if __name__ == "__main__":
+    tickr:str = input('Enter a Valid Stock Ticker: ')
+    query1 = TicQuery(tickr)
+    query1.set_qtype()
+    query1.initialize()
+    query1.set_mode()
+
+    if query1.get_qtype() == "comparison":
+        tickr2:str = input('Enter an another Valid Stock Ticker: ')
+        query2 = TicQuery(tickr2)
+        query2.initialize()
+        query2.set_mode()
+
+        query1.plot_compare(query2)
+    else:
+        query1.operation()
+
+
+

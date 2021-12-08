@@ -22,7 +22,7 @@ class Ticker:
     def plot_analysis(self, kind: str = "plot", argument="Close"):
         if self.df is not None:
             return self.plot.draw(
-                self.df, kind, argument
+                self.df, self.ticker, kind, argument
             )  # return a base64 image of the analysis plot.
         else:
             raise Exception("No DataFrame Selected.")
