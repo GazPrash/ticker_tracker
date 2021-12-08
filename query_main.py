@@ -12,7 +12,7 @@ class TicQuery:
     def __eq__(self, other):
         return (self.tic == other.tic) & (self.tic_obj == other.tic_obj)
 
-    def verify_conditionals(self, other):
+    def verify_mode(self, other):
         return self.mode == other.mode
 
     def set_qtype(self):
@@ -27,7 +27,7 @@ class TicQuery:
         self.tic_obj = Ticker(self.tic)
         if (self.tic_obj.find_dataframe()).empty:
             raise Exception(
-                "We don not have any information regarding the requested ticker/stock"
+                "We do not have any information regarding the requested ticker/stock"
             )
 
     def set_mode(self):
@@ -70,7 +70,7 @@ class TicQuery:
         df.to_csv(f"Downloads/{self.tic} Stocks/")
 
     def plot_argument(self, self_compare: bool = False) -> str:
-        arg_dict = {1: "Close", 2: "Open", 3: "Max", 4: "Adj Close", 5: "Volume"}
+        arg_dict = {1: "Close", 2: "Open", 3: "High", 4: "Adj Close", 5: "Volume"}
 
         print(
             """
@@ -145,20 +145,20 @@ class TicQuery:
         else:
             main_arg = self.plot_argument()
 
-        plot_fig = self.tic_obj.plot_analysis(kind=plot_style, argument=(main_arg))
+        plot_fig = self.tic_obj.plot_analysis(kind=plot_style, argument=(main_arg), condnl_args= self.mode)
         # plot_img.save(f"Downloads/{self.tic} Analysis")  # ......TODO Yet to define.
 
 
     def plot_compare(self, other: TicQuery):
 
-        if not self.verify_conditionals(other):
-            #note to self : use logging for the love of god aaaaaaaaaaaaaaaaaaaaaah
+        # if not self.verify_conditionals(other):
+        #     #note to self : use logging for the love of god aaaaaaaaaaaaaaaaaaaaaah
 
-            print(
-                """You've opted to analyze two different tickers together with contradicting time 
-                intervals and range. 
-                [Initial Ticker's settings will be applied for this analysis].""",
-            end = '\n\n')
+        #     print(
+        #         """You've opted to analyze two different tickers together with contradicting time 
+        #         intervals and range. 
+        #         [Initial Ticker's settings will be applied for this analysis].""",
+        #     end = '\n\n')
 
         print(
             """
@@ -171,24 +171,27 @@ class TicQuery:
             input("Choose a Comparison Type (Enter the index number of your choice): ")
         )
 
-        main_arg = self.plot_argument()
+        main_arg = self.plot_argument().strip()
+        print(f"{self.mode}")
         if ctype == 1:
-            plot_img = self.tic_obj.compare(other.tic_obj, self.set_mode, argument = main_arg)
-            plot_img.save(f"Downloads/{self.tic} Analysis")  # ......TODO Yet to define.
+            self.tic_obj.compare(other.tic_obj, self.mode, argument = main_arg)
+            # plot_img.save(f"Downloads/{self.tic} Analysis")  # ......TODO Yet to define.
+        else:
+            self.tic_obj.compare(other.tic_obj, self.mode, argument = main_arg, plot_type = 'reg-compare')
+
 
 
 if __name__ == "__main__":
     tickr:str = input('Enter a Valid Stock Ticker: ')
     query1 = TicQuery(tickr)
-    query1.set_qtype()
     query1.initialize()
     query1.set_mode()
+    query1.set_qtype()
 
     if query1.get_qtype() == "comparison":
         tickr2:str = input('Enter an another Valid Stock Ticker: ')
         query2 = TicQuery(tickr2)
         query2.initialize()
-        query2.set_mode()
 
         query1.plot_compare(query2)
     else:

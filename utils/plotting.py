@@ -3,15 +3,12 @@ import pandas as pd
 import random as rd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import io
-import base64
-
 
 class Plot:
     def __init__(self):
         self.plt = plt
         self.sns = sns
-        self.plt.figure(figsize = (15, 5))
+        self.plt.figure(figsize = (8, 4))
         self.sns.set_context('notebook')
 
     def random_ink(self):
@@ -51,42 +48,21 @@ class Plot:
         elif kind == 'vio' or kind == 'vios' or kind == 'box' or kind == 'kde':
             if kind == 'vio' or kind == 'vios':
                 swarm = True if (kind == 'vios') else False
-                return self.violin_plot(df, title, argument, swarm = swarm)
+                self.violin_plot(df, title, argument, swarm = swarm)
 
             elif kind == 'box':
-                return self.boxplot()
+                self.boxplot()
 
             elif kind == 'kde':
-                return self.kernal_density_plot()
+                self.kernal_density_plot()
             
         elif kind == 'ecdf':
-            return self.ecdf_plot(df, title, argument)
+            self.ecdf_plot(df, title, argument)
         
         elif kind == 'joint':
             self.joint_plot(df, title, argument1= arg1, argument2= arg2)
 
         self.plt.show()
-
-
-    def draw_compare(self, df1: pd.DataFrame, df2: pd.DataFrame, title1, title2,  argument:str = 'Close'):
-        clr1 = self.random_ink()
-        clr2 = self.random_ink()
-
-        self.plt.plot(df1[argument], linewidth = '2', marker = 'H', color = clr1, label = title1)
-        self.plt.plot(df2[argument], linewidth = '2', marker = '*', color = clr2, label = title2)
-        self.plt.legend()
-        self.plt.title()
-
-        return ...
-
-    def regplot_compare(self, df1: pd.DataFrame, df2: pd.DataFrame, title1, title2,  argument:str = 'Close'):
-        clr = self.random_ink()
-        self.sns.regplot(df1[argument], df2[argument], color = clr)
-        self.xlabel(title1)
-        self.ylabel(title2)
-        self.plt.title(f'{title1}-{title2} Comparison w/ Linear Regression')
-
-        return ...
 
     def ecdf_plot(self, df: pd.Dataframe, title, argument:str = 'Close'):
         clr = self.random_ink()
@@ -124,3 +100,26 @@ class Plot:
 
 
     
+class PlotComparison(Plot):
+    def __init__(self):
+        super().__init__()
+
+    def linear_compare(self, df1: pd.DataFrame, df2: pd.DataFrame, title1, title2,  argument:str = 'Close'):
+        clr1 = self.random_ink()
+        clr2 = self.random_ink()
+
+        self.plt.plot(df1[argument], linewidth = '2', marker = 'H', color = clr1, label = title1)
+        self.plt.plot(df2[argument], linewidth = '2', marker = '*', color = clr2, label = title2)
+        self.plt.legend()
+        self.plt.title(f'{title1}-{title2} Comparison w/ Linear Plot')
+
+        self.plt.show()
+
+    def regplot_compare(self, df1: pd.DataFrame, df2: pd.DataFrame, title1, title2,  argument:str = 'Close'):
+        clr = self.random_ink()
+        self.sns.regplot(df1[argument], df2[argument], color = clr)
+        self.plt.xlabel(title1)
+        self.plt.ylabel(title2)
+        self.plt.title(f'{title1}-{title2} Comparison w/ Linear Regression')
+
+        self.plt.show()

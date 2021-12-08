@@ -1,6 +1,6 @@
 from __future__ import annotations
 from utils.stocks import GetStock
-from utils.plotting import Plot
+from utils.plotting import Plot, PlotComparison
 
 import pandas as pd
 
@@ -8,7 +8,8 @@ class Ticker:
     def __init__(self, ticker: str):
         self.ticker = ticker
         self.df = None
-        self.plot = Plot()
+        self.plot = None
+        self.compare_plot = None
 
     def __eq__(self, other):
         return self.df == other.df
@@ -19,7 +20,9 @@ class Ticker:
 
         return self.df
 
-    def plot_analysis(self, kind: str = "plot", argument="Close"):
+    def plot_analysis(self, kind: str = "plot", argument="Close", condnl_args = None):
+        self.plot = Plot()
+        self.df = self.find_dataframe(*condnl_args)
         if self.df is not None:
             return self.plot.draw(
                 self.df, self.ticker, kind, argument
@@ -27,16 +30,17 @@ class Ticker:
         else:
             raise Exception("No DataFrame Selected.")
 
+
     def compare(
         self, other_ticker: Ticker, condnl_args, argument="Close", plot_type="norm-plot"
     ):
-        if self.df is None:
-            self.find_dataframe(condnl_args)
-        if other_ticker.df is None:
-            other_ticker.find_dataframe(*condnl_args)
+        self.plot = PlotComparison()
+        self.df = self.find_dataframe(*condnl_args)
+        other_ticker.df = other_ticker.find_dataframe(*condnl_args)
+
         if (not (self.df).empty) and (not (other_ticker.df).empty):
             if plot_type == "norm-plot":
-                return self.plot.draw_compare(
+                return self.plot.linear_compare(
                     self.df, other_ticker.df, self.ticker, other_ticker.ticker, argument
                 )
             elif plot_type == "reg-compare":
