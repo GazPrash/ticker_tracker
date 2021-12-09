@@ -179,26 +179,29 @@ class TicQuery:
 
 
 if __name__ == "__main__":
-    while True:
-        task:str = input("Press 'S' to get started and 'Q' to quit the software >> ")
-        if task.upper() == "S":
-            tickr: str = input("Enter a Valid Stock Ticker: ")
-            query1 = TicQuery(tickr.upper())
-            query1.initialize()
-            query1.set_mode()
-            query1.set_qtype()
+    try:
+        while True:
+            task:str = input("Press 'S' to get started and 'Q' to quit the software >> ")
+            if task.upper() == "S":
+                tickr: str = input("Enter a Valid Stock Ticker: ")
+                query1 = TicQuery(tickr.upper())
+                query1.initialize()
+                query1.set_mode()
+                query1.set_qtype()
 
-            if query1.get_qtype() == "comparison":
-                tickr2: str = input("Enter an another Valid Stock Ticker: ")
-                query2 = TicQuery(tickr2.upper())
-                query2.initialize()
+                if query1.get_qtype() == "comparison":
+                    tickr2: str = input("Enter an another Valid Stock Ticker: ")
+                    query2 = TicQuery(tickr2.upper())
+                    query2.initialize()
 
-                query1.plot_compare(query2)
-            else:
-                query1.operation()
+                    query1.plot_compare(query2)
+                else:
+                    query1.operation()
 
-        elif task.upper() == "Q":
-            break
+            elif task.upper() == "Q":
+                break
+    except Exception:
+        raise Exception
 
 
 

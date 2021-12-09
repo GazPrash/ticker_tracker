@@ -10,7 +10,7 @@ class Plot:
     def __init__(self):
         self.plt = plt
         self.sns = sns
-        self.plt.figure(figsize=(12, 6))
+        self.plt.figure(figsize=(8, 4))
         self.sns.set_context("notebook")
 
     def random_ink(self):
@@ -36,9 +36,9 @@ class Plot:
                 df.index,
                 df[argument],
                 linewidth="2",
-                marker="H",
                 color=clr,
                 label=title,
+                marker="H",
             )
             self.plt.ylabel(argument)
             # self.plt.xticks(ticks = df.index, labels = pd.Series(df.index.strftime('%d,%b|%H:%M')), rotation = '45', fontsize =5)
@@ -51,7 +51,7 @@ class Plot:
             self.plt.title(f"{title}-{argument}")
 
         elif kind == "reg":
-            self.sns.regplot(np.arange(len(df), dtype = 'int'), df[argument], color=clr, label=title)
+            self.sns.regplot(np.arange(len(df), dtype = 'int'), df[argument], color=clr, label=title, marker = '*')
             self.plt.ylabel(argument)
             # self.plt.xticks([])
             self.plt.title(f"{title}-{argument}")
@@ -62,7 +62,7 @@ class Plot:
                 self.violin_plot(df, title, argument, swarm=swarm)
 
             elif kind == "box":
-                self.boxplot()
+                self.box_plot(df, title, argument)
 
             elif kind == "kde":
                 self.kernal_density_plot()
@@ -104,7 +104,7 @@ class Plot:
         self, df: pd.Dataframe, title, argument1: str = "Close", argument2: str = "Open"
     ):
         clr = self.random_ink()
-        self.sns.jointplot(x=argument1, y=argument2, data=df, color=clr)
+        self.sns.jointplot(x=argument1, y=argument2, data=df, color=clr, marker = 'H')
         self.plt.title(
             f"Joint Plot comparison for {title} - ({argument1} & {argument2})"
         )
