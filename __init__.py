@@ -9,3 +9,5 @@ def get_version():
 
 
 __version__ = get_version()
+
+print(__version__)
