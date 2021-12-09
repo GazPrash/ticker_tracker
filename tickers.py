@@ -2,7 +2,6 @@ from __future__ import annotations
 from utils.stocks import GetStock
 from utils.plotting import Plot, PlotComparison
 
-import pandas as pd
 
 class Ticker:
     def __init__(self, ticker: str):
@@ -20,7 +19,7 @@ class Ticker:
 
         return self.df
 
-    def plot_analysis(self, kind: str = "plot", argument="Close", condnl_args = None):
+    def plot_analysis(self, kind: str = "plot", argument="Close", condnl_args=None):
         self.plot = Plot()
         self.df = self.find_dataframe(*condnl_args)
         if self.df is not None:
@@ -29,7 +28,6 @@ class Ticker:
             )  # return a base64 image of the analysis plot.
         else:
             raise Exception("No DataFrame Selected.")
-
 
     def compare(
         self, other_ticker: Ticker, condnl_args, argument="Close", plot_type="norm-plot"

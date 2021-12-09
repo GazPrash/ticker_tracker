@@ -1,3 +1,5 @@
+# For Queries made using a command line interface...
+
 from __future__ import annotations
 from tickers import Ticker
 
@@ -7,7 +9,7 @@ class TicQuery:
         self.tic = tic
         self.tic_obj = None
         self.mode = None
-        self.query_type = 'self'
+        self.query_type = "self"
 
     def __eq__(self, other):
         return (self.tic == other.tic) & (self.tic_obj == other.tic_obj)
@@ -16,9 +18,11 @@ class TicQuery:
         return self.mode == other.mode
 
     def set_qtype(self):
-        perf:str = input('Do You wish to perform a comparison analysis b/w this ticker with another? (Y/n)')
-        if perf.lower() == 'y':
-            self.query_type = 'comparison'
+        perf: str = input(
+            "Do You wish to perform a comparison analysis b/w this ticker with another? (Y/n)"
+        )
+        if perf.lower() == "y":
+            self.query_type = "comparison"
 
     def get_qtype(self):
         return self.query_type
@@ -145,20 +149,12 @@ class TicQuery:
         else:
             main_arg = self.plot_argument()
 
-        plot_fig = self.tic_obj.plot_analysis(kind=plot_style, argument=(main_arg), condnl_args= self.mode)
+        plot_fig = self.tic_obj.plot_analysis(
+            kind=plot_style, argument=(main_arg), condnl_args=self.mode
+        )
         # plot_img.save(f"Downloads/{self.tic} Analysis")  # ......TODO Yet to define.
 
-
     def plot_compare(self, other: TicQuery):
-
-        # if not self.verify_conditionals(other):
-        #     #note to self : use logging for the love of god aaaaaaaaaaaaaaaaaaaaaah
-
-        #     print(
-        #         """You've opted to analyze two different tickers together with contradicting time 
-        #         intervals and range. 
-        #         [Initial Ticker's settings will be applied for this analysis].""",
-        #     end = '\n\n')
 
         print(
             """
@@ -174,28 +170,35 @@ class TicQuery:
         main_arg = self.plot_argument().strip()
         print(f"{self.mode}")
         if ctype == 1:
-            self.tic_obj.compare(other.tic_obj, self.mode, argument = main_arg)
+            self.tic_obj.compare(other.tic_obj, self.mode, argument=main_arg)
             # plot_img.save(f"Downloads/{self.tic} Analysis")  # ......TODO Yet to define.
         else:
-            self.tic_obj.compare(other.tic_obj, self.mode, argument = main_arg, plot_type = 'reg-compare')
-
+            self.tic_obj.compare(
+                other.tic_obj, self.mode, argument=main_arg, plot_type="reg-compare"
+            )
 
 
 if __name__ == "__main__":
-    tickr:str = input('Enter a Valid Stock Ticker: ')
-    query1 = TicQuery(tickr)
-    query1.initialize()
-    query1.set_mode()
-    query1.set_qtype()
+    while True:
+        task:str = input("Press 'S' to get started and 'Q' to quit the software >> ")
+        if task.upper() == "S":
+            tickr: str = input("Enter a Valid Stock Ticker: ")
+            query1 = TicQuery(tickr.upper())
+            query1.initialize()
+            query1.set_mode()
+            query1.set_qtype()
 
-    if query1.get_qtype() == "comparison":
-        tickr2:str = input('Enter an another Valid Stock Ticker: ')
-        query2 = TicQuery(tickr2)
-        query2.initialize()
+            if query1.get_qtype() == "comparison":
+                tickr2: str = input("Enter an another Valid Stock Ticker: ")
+                query2 = TicQuery(tickr2.upper())
+                query2.initialize()
 
-        query1.plot_compare(query2)
-    else:
-        query1.operation()
+                query1.plot_compare(query2)
+            else:
+                query1.operation()
+
+        elif task.upper() == "Q":
+            break
 
 
 
