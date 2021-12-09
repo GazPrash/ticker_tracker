@@ -10,4 +10,5 @@ def get_version():
 
 __version__ = get_version()
 
-print(__version__)
+if __name__ == "__main__":
+    print(__version__)
