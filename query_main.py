@@ -19,7 +19,7 @@ class TicQuery:
 
     def set_qtype(self):
         perf: str = input(
-            "Do You wish to perform a comparison analysis b/w this ticker with another? (Y/n)"
+            "Do You wish to perform a comparison analysis b/w this ticker with another? (Y/n): "
         )
         if perf.lower() == "y":
             self.query_type = "comparison"
@@ -42,10 +42,10 @@ class TicQuery:
 
         else:
             t_range: str = input(
-                "Select & Enter a valid timeframe (1d/5d/1mo/3mo/1y/max)"
+                "Select & Enter a valid timeframe (1d/5d/1mo/3mo/1y/max): "
             )
             interval: str = input(
-                "Select & Enter a valid time interval (5m/15m/30m/90m/1h/1d)"
+                "Select & Enter a valid time interval (5m/15m/30m/90m/1h/1d): "
             )
 
         self.mode = (t_range, interval)
@@ -118,6 +118,8 @@ class TicQuery:
             6. Box Plot
             7. Empirical Cumulative Desnity Frequency Plot
             8. Joint Plot Comparison
+            9. Kernal Desnity Estimation
+            10. Cluster Map
         
         """
         )
@@ -143,9 +145,16 @@ class TicQuery:
             plot_style = "ecdf"
         elif anls_mode == 8:
             plot_style = "joint"
+        elif anls_mode == 9:
+            plot_style = "kde"
+        elif anls_mode == 10:
+            plot_style = "cluster"
 
         if anls_mode == 8:
             main_arg = self.plot_argument(self_compare=True)
+        elif anls_mode == 10:
+            # Only Default Arguments Will Be Used for Cluster Maps ...
+            main_arg = ""
         else:
             main_arg = self.plot_argument()
 
@@ -159,7 +168,8 @@ class TicQuery:
         print(
             """
             1. Linear Plot Comparison
-            2. Scatter Plot Comparison w/ Regression        
+            2. Scatter Plot Comparison w/ Regression
+            3. Kernal Density Estimation        
         
         """
         )
@@ -172,16 +182,22 @@ class TicQuery:
         if ctype == 1:
             self.tic_obj.compare(other.tic_obj, self.mode, argument=main_arg)
             # plot_img.save(f"Downloads/{self.tic} Analysis")  # ......TODO Yet to define.
-        else:
+        elif ctype == 2:
             self.tic_obj.compare(
                 other.tic_obj, self.mode, argument=main_arg, plot_type="reg-compare"
+            )
+        elif ctype == 3:
+            self.tic_obj.compare(
+                other.tic_obj, self.mode, argument=main_arg, plot_type="kde-compare"
             )
 
 
 if __name__ == "__main__":
     try:
         while True:
-            task:str = input("Press 'S' to get started and 'Q' to quit the software >> ")
+            task: str = input(
+                "Press 'S' to get started and 'Q' to quit the software >> "
+            )
             if task.upper() == "S":
                 tickr: str = input("Enter a Valid Stock Ticker: ")
                 query1 = TicQuery(tickr.upper())
@@ -194,14 +210,14 @@ if __name__ == "__main__":
                     query2 = TicQuery(tickr2.upper())
                     query2.initialize()
 
+                    if query1.tic_obj == query2.tic_obj:
+                        raise Exception("Please select a different database.")
+
                     query1.plot_compare(query2)
                 else:
                     query1.operation()
 
             elif task.upper() == "Q":
                 break
-    except Exception:
-        raise Exception
-
-
-
+    except Exception as e:
+        print(e)

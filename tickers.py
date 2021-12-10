@@ -11,7 +11,7 @@ class Ticker:
         self.compare_plot = None
 
     def __eq__(self, other):
-        return self.df == other.df
+        return self.ticker == other.ticker
 
     def find_dataframe(self, trange: str = "1d", interval: str = "30m"):
         get_ticker = GetStock(self.ticker, trange, interval)
@@ -23,6 +23,7 @@ class Ticker:
         self.plot = Plot()
         self.df = self.find_dataframe(*condnl_args)
         if self.df is not None:
+            self.plot.initialize_settings(kind = kind)
             return self.plot.draw(
                 self.df, self.ticker, kind, argument
             )  # return a base64 image of the analysis plot.
@@ -43,6 +44,10 @@ class Ticker:
                 )
             elif plot_type == "reg-compare":
                 return self.plot.regplot_compare(
+                    self.df, other_ticker.df, self.ticker, other_ticker.ticker, argument
+                )
+            elif plot_type == "kde-compare":
+                return self.plot.kde_compare(
                     self.df, other_ticker.df, self.ticker, other_ticker.ticker, argument
                 )
         else:
