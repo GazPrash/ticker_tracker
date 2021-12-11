@@ -74,7 +74,7 @@ class TicQuery:
         df.to_csv(f"Downloads/{self.tic} Stocks/")
 
     def plot_argument(self, self_compare: bool = False) -> str:
-        arg_dict = {1: "Close", 2: "Open", 3: "High", 4: "Adj Close", 5: "Volume"}
+        arg_dict = {1: "Close", 2: "Open", 3: "High", 4: "AdjClose", 5: "Volume"}
 
         print(
             """

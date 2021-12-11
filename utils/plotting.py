@@ -13,7 +13,7 @@ class Plot:
 
     def initialize_settings(self, kind):
         if kind == "cluster" or kind == "joint":
-            # this plots do not allow to change the default figsize orientation, 
+            # this plot do not allow to change the default figsize orientation, 
             # hence by doing so it'll result in a new stack added to matplotlib axes, 
             # which will output an extra empty figure
             return
@@ -33,11 +33,18 @@ class Plot:
     def draw(self, df: pd.DataFrame, title: str, kind: str = "plot", argument="Close"):
         clr = self.random_ink()
         # df.index = df.index.strftime('%d,%b|%H:%M')
-
         if kind == "joint":
             arg1, arg2 = argument.split(" ")
+            if arg1 == "AdjClose":
+                arg1 = "Adj Close"
+            
+            elif arg2 == "AdjClose":
+                arg2 = "Adj Close"
+
         else:
             argument = argument.strip()
+            if argument == "AdjClose":
+                argument = "Adj Close"
 
         if kind == "plot":
             self.plt.plot(
@@ -102,7 +109,7 @@ class Plot:
         self, df: pd.Dataframe, title: str, argument: str = "Close", swarm=False
     ):
         clr = self.random_ink()
-        self.sns.violinplot(x=None, y=argument, data=df, color=clr)
+        self.sns.violinplot(x=None, y=argument, data=df, color=clr, bw = 0.2)
         if swarm:
             self.sns.swarmplot(x=None, y=argument, data=df, color="#000")
         self.plt.title(f"Violin Dist. for {title}")
@@ -129,7 +136,8 @@ class Plot:
         clr = self.random_ink()
         self.sns.jointplot(x=argument1, y=argument2, data=df, color=clr, marker="H")
         self.plt.title(
-            f"Joint Plot comparison for {title} - ({argument1} & {argument2})"
+            f"Joint Plot comparison for {title} - ({argument1} & {argument2})",
+             x = -3, y = 1.12
         )
 
     def cluster_map(
