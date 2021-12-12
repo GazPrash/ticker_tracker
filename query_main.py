@@ -6,8 +6,6 @@
 """
 
 
-
-
 # For Queries made using a command line interface...
 from __future__ import annotations
 from tickers import Ticker
