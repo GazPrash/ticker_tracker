@@ -1,6 +1,6 @@
 Ticker Tracker (v0.0.5)
 
-• Ticker Tracker is a software that provides you the ability to perform technical analysis on your favourite stocks on the sport eliminating the need to write any code or search for an online paid service whatsover. 
+• Ticker Tracker is a software that provides you the ability to perform technical analysis on your favourite stocks on the spot eliminating the need to write any code or search for an online paid service whatsoever. 
 Just search for a particular stock to get started and you can obtain all the data about that ticker and can generate different types of visualizations with data within a few seconds. 
 
 Enter your stock name/ticker, choose a timeframe (from short as close as 5 minutes to as enormous as the last decade), and generate any chart/graph or comparison you would like to perform.
