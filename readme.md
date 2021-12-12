@@ -20,9 +20,7 @@ Enter your stock name/ticker, choose a timeframe (from short as close as 5 minut
 • _Features:_
 > • Get the latest datasets about the highs and the lows of any stock tickers.\
 > • Scrutinize or compare the stocks of your choice and generate visualizations on any aspect of the ticker directly without even writing a single line of code.\
-> • Download CSVs or Visualizations of your analysis.\
-
-![HEAT](https://user-images.githubusercontent.com/77027543/145730156-1f132909-2fc9-4791-bd2a-66465770e3bb.png)
+> • Download CSVs or Visualizations of your analysis.
 
 • _Options available for charts:_
 > • Line Plot\
@@ -30,7 +28,9 @@ Enter your stock name/ticker, choose a timeframe (from short as close as 5 minut
 > • Violin Plot [w/ Swarming Plot]\
 > • Box Plot\
 > • Kernal Density Estimations\
-> • Cluster & Heat Maps.\
+> • Cluster & Heat Maps.
+
+![HEAT](https://user-images.githubusercontent.com/77027543/145730156-1f132909-2fc9-4791-bd2a-66465770e3bb.png)
 
 ![output1](https://user-images.githubusercontent.com/77027543/145730160-d532f810-4785-466b-8862-976837ff7a4c.png)
  
