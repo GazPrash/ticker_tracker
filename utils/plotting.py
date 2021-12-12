@@ -12,7 +12,7 @@ class Plot:
         self.sns = sns
 
     def initialize_settings(self, kind):
-        if kind == "cluster" or kind == "joint":
+        if kind == "cluster" or kind == "joint" or kind == "heat":
             # this plot do not allow to change the default figsize orientation, 
             # hence by doing so it'll result in a new stack added to matplotlib axes, 
             # which will output an extra empty figure
@@ -57,13 +57,13 @@ class Plot:
             )
             self.plt.ylabel(argument)
             # self.plt.xticks(ticks = df.index, labels = pd.Series(df.index.strftime('%d,%b|%H:%M')), rotation = '45', fontsize =5)
-            self.plt.title(f"{title}-{argument}")
+            self.plt.title(f"{title}-{argument} | LIVE : {df.iloc[len(df) -1][argument]}")
 
-        elif kind == "bar":
-            self.plt.bar(df.index, df[argument], color=clr, label=title)
-            self.plt.ylabel(argument)
-            # self.plt.xticks(ticks = df.index, labels = df.index.strftime('%d,%b|%H:%M'))
-            self.plt.title(f"{title}-{argument}")
+        # elif kind == "bar":
+        #     self.plt.bar(df.index, df[argument], color=clr, label=title)
+        #     self.plt.ylabel(argument)
+        #     # self.plt.xticks(ticks = df.index, labels = df.index.strftime('%d,%b|%H:%M'))
+        #     self.plt.title(f"{title}-{argument} | LIVE : {df.iloc[len(df) -1][argument]}")
 
         elif kind == "reg":
             self.sns.regplot(
@@ -75,7 +75,7 @@ class Plot:
             )
             self.plt.ylabel(argument)
             # self.plt.xticks([])
-            self.plt.title(f"{title}-{argument}")
+            self.plt.title(f"{title}-{argument} | LIVE : {df.iloc[len(df) -1][argument]}")
 
         elif kind == "vio" or kind == "vios" or kind == "box" or kind == "kde":
             if kind == "vio" or kind == "vios":
@@ -97,13 +97,16 @@ class Plot:
         elif kind == "cluster":
             self.cluster_map(df, title)
 
+        elif kind == "heat":
+            self.heat_map(df, title)
+
         self.plt.show()
 
     def ecdf_plot(self, df: pd.Dataframe, title: str, argument: str = "Close"):
         clr = self.random_ink()
         self.sns.ecdfplot(x=df[argument], color=clr, linewidth="2")
         self.plt.xlabel(title)
-        self.plt.title(f"Empirical Cumulative Dist. Function for {title}")
+        self.plt.title(f"Empirical Cumulative Dist. Function for {title} | LIVE : {df.iloc[len(df) -1][argument]}")
 
     def violin_plot(
         self, df: pd.Dataframe, title: str, argument: str = "Close", swarm=False
@@ -112,19 +115,19 @@ class Plot:
         self.sns.violinplot(x=None, y=argument, data=df, color=clr, bw = 0.2)
         if swarm:
             self.sns.swarmplot(x=None, y=argument, data=df, color="#000")
-        self.plt.title(f"Violin Dist. for {title}")
+        self.plt.title(f"Violin Dist. for {title} | LIVE : {df.iloc[len(df) -1][argument]}")
 
     def box_plot(self, df: pd.Dataframe, title: str, argument: str = "Close"):
         clr = self.random_ink()
         self.sns.boxplot(x=None, y=argument, data=df, color=clr)
-        self.plt.title(f"Box Dist. for {title}")
+        self.plt.title(f"Box Dist. for {title} | LIVE : {df.iloc[len(df) -1][argument]}")
 
     def kernal_density_plot(
         self, df: pd.Dataframe, title: str, argument: str = "Close"
     ):
         clr = self.random_ink()
         self.sns.kdeplot(x=argument, y=None, data=df, color=clr)
-        self.plt.title(f"Kernal Desnity Est. for {title}")
+        self.plt.title(f"Kernal Desnity Est. for {title} | LIVE : {df.iloc[len(df) -1][argument]}")
 
     def joint_plot(
         self,
@@ -145,6 +148,13 @@ class Plot:
     ):
         self.sns.clustermap(data=df[["Close", "Adj Close", "Open", "High"]])
         self.plt.title(f"Cluster Map for {title}")
+
+    def heat_map(
+        self, df: pd.Dataframe, title: str        
+    ):
+        matrix = df.loc[:, 'Open':'Adj Close'].corr()
+        self.sns.heatmap(matrix, annot = True)
+        self.plt.title(f"Heatmap for {title}")
 
     def encode_img(
         self,
@@ -174,7 +184,7 @@ class PlotComparison(Plot):
             df2[argument], linewidth="2", marker="*", color=clr2, label=title2
         )
         self.plt.legend()
-        self.plt.title(f"{title1}-{title2} Comparison w/ Linear Plot")
+        self.plt.title(f"{title1}-{title2} Comparison w/ Linear Plot | LIVE : {title1}: {df1.iloc[len(df1) -1][argument]} & {title2}: {df2.iloc[len(df2) -1][argument]}")
 
         self.plt.show()
 
@@ -190,7 +200,7 @@ class PlotComparison(Plot):
         self.sns.regplot(df1[argument], df2[argument], color=clr)
         self.plt.xlabel(title1)
         self.plt.ylabel(title2)
-        self.plt.title(f"{title1}-{title2} Comparison w/ Linear Regression")
+        self.plt.title(f"{title1}-{title2} Comparison w/ Linear Regression | LIVE : {title1}: {df1.iloc[len(df1) -1][argument]} & {title2}: {df2.iloc[len(df2) -1][argument]}")
 
         self.plt.show()
 
@@ -207,6 +217,6 @@ class PlotComparison(Plot):
         self.sns.kdeplot(x=df1[argument], y=None, color=clr1, label=title1)
         self.sns.kdeplot(x=df2[argument], y=None, color=clr2, label=title2)
         self.plt.legend()
-        self.plt.title(f"{title1}-{title2} Comparison w/ Kernal Density Estimation")
+        self.plt.title(f"{title1}-{title2} Comparison w/ Kernal Density Estimation | LIVE : {title1}: {df1.iloc[len(df1) -1][argument]} & {title2}: {df2.iloc[len(df2) -1][argument]}")
 
         self.plt.show()

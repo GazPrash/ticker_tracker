@@ -111,15 +111,15 @@ class TicQuery:
         print(
             """
             1. Line Plot
-            2. Bar Plot
-            3. Linear Regression Plot
-            4. Violin Plot
-            5. Violin Plot (w/ Swarm)
-            6. Box Plot
-            7. Empirical Cumulative Desnity Frequency Plot
-            8. Joint Plot Comparison
-            9. Kernal Desnity Estimation
-            10. Cluster Map
+            2. Linear Regression Plot
+            3. Violin Plot
+            4. Violin Plot (w/ Swarm)
+            5. Box Plot
+            6. Empirical Cumulative Desnity Frequency Plot
+            7. Joint Plot Comparison
+            8. Kernal Desnity Estimation
+            9. Cluster Map
+            10. Heatmap
         
         """
         )
@@ -132,27 +132,27 @@ class TicQuery:
         if anls_mode == 1:
             plot_style = "plot"
         elif anls_mode == 2:
-            plot_style = "bar"
-        elif anls_mode == 3:
             plot_style = "reg"
-        elif anls_mode == 4:
+        elif anls_mode == 3:
             plot_style = "vio"
-        elif anls_mode == 5:
+        elif anls_mode == 4:
             plot_style = "vios"
-        elif anls_mode == 6:
+        elif anls_mode == 5:
             plot_style = "box"
-        elif anls_mode == 7:
+        elif anls_mode == 6:
             plot_style = "ecdf"
-        elif anls_mode == 8:
+        elif anls_mode == 7:
             plot_style = "joint"
-        elif anls_mode == 9:
+        elif anls_mode == 8:
             plot_style = "kde"
-        elif anls_mode == 10:
+        elif anls_mode == 9:
             plot_style = "cluster"
+        elif anls_mode == 10:
+            plot_style = "heat"
 
         if anls_mode == 8:
             main_arg = self.plot_argument(self_compare=True)
-        elif anls_mode == 10:
+        elif anls_mode == 9 or anls_mode == 10:
             # Only Default Arguments Will Be Used for Cluster Maps ...
             main_arg = ""
         else:
