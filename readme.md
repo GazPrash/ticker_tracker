@@ -11,7 +11,7 @@ Enter your stock name/ticker, choose a timeframe (from short as close as 5 minut
 4. yfinance (For stock data via Yahoo Finance)\
 <sub><sup>[For all the other secondary requirements checkout requirements.txt]</sup></sub>
 
-• _How to get started?:_\
+• _How to get started?:_
 > • Download the latest stable build from the release tab, along with all the necessary requirements. [Current v0.0.5]
 
 
