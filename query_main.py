@@ -1,5 +1,14 @@
-# For Queries made using a command line interface...
+"""
+    Developed By:- Prashant Shrivastava
+    © 2021, All Rights Reserved
+    Version:- 0.0.5
 
+"""
+
+
+
+
+# For Queries made using a command line interface...
 from __future__ import annotations
 from tickers import Ticker
 
