@@ -178,7 +178,9 @@ class TicQuery:
         )
 
         main_arg = self.plot_argument().strip()
-        print(f"{self.mode}")
+        if main_arg == "AdjClose":
+            main_arg = "Adj Close"
+
         if ctype == 1:
             self.tic_obj.compare(other.tic_obj, self.mode, argument=main_arg)
             # plot_img.save(f"Downloads/{self.tic} Analysis")  # ......TODO Yet to define.

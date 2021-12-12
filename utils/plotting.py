@@ -166,6 +166,9 @@ class PlotComparison(Plot):
     def __init__(self):
         super().__init__()
 
+    def initialize_settings(self):
+        self.plt.figure(figsize = (12, 5))
+
     def linear_compare(
         self,
         df1: pd.DataFrame,

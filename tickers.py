@@ -34,6 +34,7 @@ class Ticker:
         self, other_ticker: Ticker, condnl_args, argument="Close", plot_type="norm-plot"
     ):
         self.plot = PlotComparison()
+        self.plot.initialize_settings()
         self.df = self.find_dataframe(*condnl_args)
         other_ticker.df = other_ticker.find_dataframe(*condnl_args)
 
